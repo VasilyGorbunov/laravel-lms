@@ -41,4 +41,9 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function instructor(): static
+    {
+        return $this->state(fn (array $attributes) => ['is_instructor' => true]);
+    }
 }
