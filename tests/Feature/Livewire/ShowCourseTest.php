@@ -2,6 +2,7 @@
 
 use App\Livewire\ShowCourse;
 use App\Models\Course;
+use App\Models\Episode;
 use App\Models\User;
 use Livewire\Livewire;
 
@@ -13,6 +14,7 @@ it('renders successfully', function () {
 it('shows course details', function () {
     $course = Course::factory()
         ->for(User::factory()->instructor(), 'instructor')
+        ->has(Episode::factory()->count(10), 'episodes')
         ->create();
 
     Livewire::test(ShowCourse::class, ['course' => $course, 'foo' => 'bar'])
@@ -21,5 +23,7 @@ it('shows course details', function () {
         ->assertSeeText($course->tagline)
         ->assertSeeText($course->description)
         ->assertSeeText($course->instructor->name)
-        ->assertSeeText('2024-03-18');
+        ->assertSeeText($course->created_at->format('Y-m-d'))
+        ->assertSeeText($course->episodes_count . ' episodes')
+        ->assertSeeText($course->episodes_duration_sum);
 });
