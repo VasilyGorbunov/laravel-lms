@@ -14,7 +14,9 @@ return new class extends Migration
     {
         Schema::create('episodes', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
             $table->foreignIdFor(Course::class);
+            $table->integer('length_in_minutes');
             $table->timestamps();
         });
     }
