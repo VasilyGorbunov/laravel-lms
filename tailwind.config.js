@@ -7,4 +7,7 @@ export default {
         './resources/views/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
     ],
+    safelist: [
+        'text-4xl',
+    ]
 }

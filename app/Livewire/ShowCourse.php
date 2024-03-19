@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Course;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -33,21 +34,36 @@ class ShowCourse extends Component  implements HasInfolists, HasForms
             ->record($this->course)
             ->schema([
                 Section::make()->schema([
-                    TextEntry::make('title'),
-                    TextEntry::make('tagline'),
-                    TextEntry::make('description'),
-                    TextEntry::make('instructor.name'),
+                    TextEntry::make('title')
+                        ->label('')
+                        ->size('text-4xl')
+                        ->weight('font-bold')
+                        ->columnSpanFull(),
+                    TextEntry::make('tagline')
+                        ->label('')
+                        ->columnSpanFull(),
+                    TextEntry::make('instructor.name')
+                        ->label('Your Teacher')
+                        ->columnSpanFull(),
                     TextEntry::make('episodes_count')
                         ->label('')
-                        ->formatStateUsing(fn ($state) => "$state episodes"),
+                        ->formatStateUsing(fn ($state) => "$state episodes")
+                        ->icon('heroicon-o-film'),
                     TextEntry::make('formatted_length')
-                        ->label(''),
+                        ->label('')
+                        ->icon('heroicon-o-clock'),
                     TextEntry::make('created_at')
-                        ->date('Y-m-d'),
+                        ->date('Y-m-d')
+                        ->formatStateUsing(fn ($state) => $state->diffForHumans())
+                        ->icon('heroicon-o-calendar'),
                     RepeatableEntry::make('episodes')->schema([
-                        TextEntry::make('title'),
-                        TextEntry::make('formatted_length'),
-                    ]),
+                        TextEntry::make('title')
+                            ->hiddenLabel()
+                            ->icon('heroicon-o-play-circle'),
+                        TextEntry::make('formatted_length')
+                            ->hiddenLabel()
+                            ->icon('heroicon-o-clock'),
+                    ])->columns(2),
                 ]),
             ]);
     }
