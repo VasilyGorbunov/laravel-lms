@@ -45,26 +45,40 @@ class ShowCourse extends Component  implements HasInfolists, HasForms
                     TextEntry::make('instructor.name')
                         ->label('Your Teacher')
                         ->columnSpanFull(),
-                    TextEntry::make('episodes_count')
-                        ->label('')
-                        ->formatStateUsing(fn ($state) => "$state episodes")
-                        ->icon('heroicon-o-film'),
-                    TextEntry::make('formatted_length')
-                        ->label('')
-                        ->icon('heroicon-o-clock'),
-                    TextEntry::make('created_at')
-                        ->date('Y-m-d')
-                        ->formatStateUsing(fn ($state) => $state->diffForHumans())
-                        ->icon('heroicon-o-calendar'),
-                    RepeatableEntry::make('episodes')->schema([
-                        TextEntry::make('title')
-                            ->hiddenLabel()
-                            ->icon('heroicon-o-play-circle'),
-                        TextEntry::make('formatted_length')
-                            ->hiddenLabel()
-                            ->icon('heroicon-o-clock'),
-                    ])->columns(2),
-                ]),
+
+
+                    Fieldset::make('')
+                        ->columns(3)
+                        ->columnSpan(1)
+                        ->schema([
+                            TextEntry::make('episodes_count')
+                                ->label('')
+                                ->formatStateUsing(fn ($state) => "$state episodes")
+                                ->icon('heroicon-o-film'),
+                            TextEntry::make('formatted_length')
+                                ->label('')
+                                ->icon('heroicon-o-clock'),
+                            TextEntry::make('created_at')
+                                ->date('Y-m-d')
+                                ->formatStateUsing(fn ($state) => $state->diffForHumans())
+                                ->icon('heroicon-o-calendar'),
+                        ])
+                    ->extraAttributes(['class' => 'border-none !p-0']),
+                ])->columns(2),
+                Section::make('About this course')
+                    ->description(fn (Course $record) => $record->description)
+                    ->aside()
+                    ->schema([
+                        RepeatableEntry::make('episodes')->schema([
+                            TextEntry::make('title')
+                                ->hiddenLabel()
+                                ->icon('heroicon-o-play-circle'),
+                            TextEntry::make('formatted_length')
+                                ->hiddenLabel()
+                                ->icon('heroicon-o-clock'),
+                        ]),
+                    ])
+                    ->columns(1)
             ]);
     }
 
