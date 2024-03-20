@@ -14,3 +14,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/courses/{course}', \App\Livewire\ShowCourse::class)->name('courses.show');
+Route::get('/courses/{course}/episodes/{episode?}', \App\Livewire\WatchEpisode::class)->name('courses.episodes.show');

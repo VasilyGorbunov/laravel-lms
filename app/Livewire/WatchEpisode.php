@@ -8,6 +8,7 @@ use App\Models\Episode;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
@@ -37,18 +38,31 @@ class WatchEpisode extends Component implements HasInfolists, HasForms
     {
         return $infolist
             ->record($this->currentEpisode)
+            ->columns(3)
             ->schema([
-                VideoPlayerEntry::make('vimeo_id')
-                    ->hiddenLabel(),
-                TextEntry::make('overview'),
-                RepeatableEntry::make('course.episodes')->schema([
+                Section::make([
                     TextEntry::make('title')
                         ->hiddenLabel()
-                        ->icon('heroicon-o-play-circle'),
-                    TextEntry::make('formatted_length')
+                        ->size('text-4xl')
+                        ->weight('font-bold')
+                        ->columnSpan(2),
+                    VideoPlayerEntry::make('vimeo_id')
                         ->hiddenLabel()
-                        ->icon('heroicon-o-clock'),
-                ])
+                        ->columnSpan(2),
+                    TextEntry::make('overview')
+                        ->columnSpan(2),
+
+                ])->columnSpan(2),
+                RepeatableEntry::make('course.episodes')
+                    ->hiddenLabel()
+                    ->schema([
+                        TextEntry::make('title')
+                            ->hiddenLabel()
+                            ->icon('heroicon-o-play-circle'),
+                        TextEntry::make('formatted_length')
+                            ->hiddenLabel()
+                            ->icon('heroicon-o-clock'),
+                    ])->columns(2),
             ]);
     }
 

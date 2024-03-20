@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Course;
+use App\Models\Episode;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Components\Fieldset;
@@ -66,19 +67,20 @@ class ShowCourse extends Component  implements HasInfolists, HasForms
                     ->extraAttributes(['class' => 'border-none !p-0']),
                 ])->columns(2),
                 Section::make('About this course')
-                    ->description(fn (Course $record) => $record->description)
-                    ->aside()
+                    ->columns(3)
                     ->schema([
+                        TextEntry::make('description')
+                            ->columnSpan(2),
                         RepeatableEntry::make('episodes')->schema([
                             TextEntry::make('title')
                                 ->hiddenLabel()
-                                ->icon('heroicon-o-play-circle'),
+                                ->icon('heroicon-o-play-circle')
+                                ->url(fn (Episode $record) => route('courses.episodes.show', ['course' => $record->course->getRouteKey(), 'episode' => $record->getRouteKey()])),
                             TextEntry::make('formatted_length')
                                 ->hiddenLabel()
                                 ->icon('heroicon-o-clock'),
-                        ]),
+                        ])->columns(2),
                     ])
-                    ->columns(1)
             ]);
     }
 
