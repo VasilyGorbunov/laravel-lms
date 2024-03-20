@@ -95,3 +95,34 @@ it('shows the list of episodes in ascending order', function () {
         ]);
 });
 
+it('redirect to next episode after video ends', function () {
+    $course = Course::factory()
+        ->for(User::factory()->instructor(), 'instructor')
+        ->has(Episode::factory(2)->state(new Sequence(
+            ['overview' => 'First episode overview', 'sort' => 1],
+            ['overview' => 'Second episode overview', 'sort' => 2],
+        )), 'episodes')
+        ->create();
+
+    Livewire::test(WatchEpisode::class, ['course' => $course])
+        ->assertOk()
+        ->assertSeeText('First episode overview')
+        ->dispatch('episode-ended', $course->episodes->first()->getRouteKey())
+        ->assertSeeText('Second episode overview');
+});
+
+it('stays in the last episode after video ends', function () {
+    $course = Course::factory()
+        ->for(User::factory()->instructor(), 'instructor')
+        ->has(Episode::factory(2)->state(new Sequence(
+            ['overview' => 'First episode overview', 'sort' => 1],
+            ['overview' => 'Second episode overview', 'sort' => 2],
+        )), 'episodes')
+        ->create();
+
+    Livewire::test(WatchEpisode::class, ['course' => $course, 'episode' => $course->episodes->last()->getRouteKey()])
+        ->assertOk()
+        ->dispatch('episode-ended', $course->episodes->last()->getRouteKey())
+        ->assertSeeText('Second episode overview');
+});
+

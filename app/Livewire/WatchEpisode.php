@@ -78,6 +78,6 @@ class WatchEpisode extends Component implements HasInfolists, HasForms
     #[On('episode-ended')]
     public function onEpisodeEnded(Episode $episode)
     {
-        dd('move to next episode...', $episode);
+        $this->currentEpisode = Episode::firstWhere('sort', $episode->sort + 1) ?: $episode;
     }
 }
