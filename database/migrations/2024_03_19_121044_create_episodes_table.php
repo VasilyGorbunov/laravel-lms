@@ -15,8 +15,10 @@ return new class extends Migration
         Schema::create('episodes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignIdFor(Course::class);
             $table->integer('length_in_minutes');
+            $table->string('vimeo_id');
+            $table->text('overview');
+            $table->foreignIdFor(Course::class);
             $table->timestamps();
         });
     }
