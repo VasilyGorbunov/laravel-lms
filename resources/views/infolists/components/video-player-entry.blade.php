@@ -15,7 +15,9 @@
     let player = new Vimeo.Player(iframe);
 
     player.on('ended', (data) => {
-        $wire.dispatch('episode-ended');
+        $wire.dispatch('episode-ended', {
+            episode: '{{ $getRecord()->id }}'
+        });
     });
 </script>
 @endscript

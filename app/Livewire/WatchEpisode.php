@@ -56,10 +56,13 @@ class WatchEpisode extends Component implements HasInfolists, HasForms
                 ])->columnSpan(2),
                 RepeatableEntry::make('course.episodes')
                     ->hiddenLabel()
+                    // ->contained(false)
                     ->schema([
                         TextEntry::make('title')
                             ->hiddenLabel()
-                            ->icon('heroicon-o-play-circle'),
+                            ->icon(fn (Episode $record) => $record->id === $this->currentEpisode->id ? 'heroicon-s-play-circle' : 'heroicon-o-play-circle')
+                            ->iconColor(fn (Episode $record) => $record->id === $this->currentEpisode->id ? 'success' : 'gray')
+                            ->weight(fn (Episode $record) => $record->id === $this->currentEpisode->id ? 'font-bold' : 'font-base'),
                         TextEntry::make('formatted_length')
                             ->hiddenLabel()
                             ->icon('heroicon-o-clock'),
@@ -73,8 +76,8 @@ class WatchEpisode extends Component implements HasInfolists, HasForms
     }
 
     #[On('episode-ended')]
-    public function onEpisodeEnded()
+    public function onEpisodeEnded(Episode $episode)
     {
-        dd('move to next episode...');
+        dd('move to next episode...', $episode);
     }
 }

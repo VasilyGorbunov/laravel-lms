@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            CourseSeeder::class,
+        ]);
 //        $course = Course::factory()
 //            ->for(User::factory()->instructor(), 'instructor')
 //            ->has(Episode::factory(3)->state(new Sequence(
