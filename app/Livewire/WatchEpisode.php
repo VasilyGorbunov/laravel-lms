@@ -2,12 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Infolists\Components\VideoPlayerEntry;
 use App\Models\Course;
 use App\Models\Episode;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Concerns\InteractsWithInfolists;
+use Filament\Infolists\Contracts\HasInfolists;
+use Filament\Infolists\Infolist;
 use Livewire\Component;
 
-class WatchEpisode extends Component
+class WatchEpisode extends Component implements HasInfolists, HasForms
 {
+    use InteractsWithInfolists, InteractsWithForms;
+
     public Course $course;
     public Episode $currentEpisode;
 
@@ -21,6 +31,25 @@ class WatchEpisode extends Component
             $this->currentEpisode = $course->episodes->first();
         }
 
+    }
+
+    public function episodeInfolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->record($this->currentEpisode)
+            ->schema([
+                VideoPlayerEntry::make('vimeo_id')
+                    ->hiddenLabel(),
+                TextEntry::make('overview'),
+                RepeatableEntry::make('course.episodes')->schema([
+                    TextEntry::make('title')
+                        ->hiddenLabel()
+                        ->icon('heroicon-o-play-circle'),
+                    TextEntry::make('formatted_length')
+                        ->hiddenLabel()
+                        ->icon('heroicon-o-clock'),
+                ])
+            ]);
     }
 
     public function render()
