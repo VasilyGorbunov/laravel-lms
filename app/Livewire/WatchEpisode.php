@@ -13,6 +13,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class WatchEpisode extends Component implements HasInfolists, HasForms
@@ -69,5 +70,11 @@ class WatchEpisode extends Component implements HasInfolists, HasForms
     public function render()
     {
         return view('livewire.watch-episode');
+    }
+
+    #[On('episode-ended')]
+    public function onEpisodeEnded()
+    {
+        dd('move to next episode...');
     }
 }

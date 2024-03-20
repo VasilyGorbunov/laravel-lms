@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Course;
 use App\Models\Episode;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +16,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Course::factory()
-            ->for(User::factory()->instructor(), 'instructor')
-            ->has(Episode::factory()->state(['vimeo_id' => '116716575']), 'episodes')
-            ->create();
+//        $course = Course::factory()
+//            ->for(User::factory()->instructor(), 'instructor')
+//            ->has(Episode::factory(3)->state(new Sequence(
+//                ['vimeo_id' => '116716575'],
+//                ['vimeo_id' => '116716575'],
+//                ['vimeo_id' => '116716575'],
+//            )), 'episodes')
+//            ->create();
     }
 }
