@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 
+Route::get('/courses/{course}', \App\Livewire\ShowCourse::class)->name('courses.show');
+Route::get('/courses/{course}/episodes/{episode?}', \App\Livewire\WatchEpisode::class)
+    ->middleware(['auth'])
+    ->name('courses.episodes.show');
+
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
