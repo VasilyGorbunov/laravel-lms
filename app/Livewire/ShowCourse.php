@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Episode;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -65,6 +66,19 @@ class ShowCourse extends Component  implements HasInfolists, HasForms
                                 ->icon('heroicon-o-calendar'),
                         ])
                     ->extraAttributes(['class' => 'border-none !p-0']),
+
+                    Actions::make([
+                        Actions\Action::make('watch')
+                            ->label(fn (Course $record) => auth()->user()?->courses->contains($record)
+                                ? 'Continue Watching'
+                                : 'Start Watching')
+                            ->button()
+                            ->icon('heroicon-o-play-circle')
+                            ->action(fn (Course $record) => $this->redirectRoute('courses.episodes.show', ['course' => $record])),
+                    ])
+                    ->columnSpanFull(),
+
+
                 ])->columns(2),
                 Section::make('About this course')
                     ->columns(3)

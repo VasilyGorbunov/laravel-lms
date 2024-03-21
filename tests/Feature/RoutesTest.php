@@ -11,6 +11,8 @@ it('has a route for the course details page page', function () {
         ->for(User::factory()->instructor(), 'instructor')
         ->create();
 
+    actingAs(User::factory()->create());
+
     get(route('courses.show', ['course' => $course]))
         ->assertOk();
 });

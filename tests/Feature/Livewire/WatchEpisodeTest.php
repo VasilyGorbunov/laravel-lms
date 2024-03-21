@@ -164,3 +164,47 @@ it('forbids showing episodes to users that do not owned courses', function () {
 
 });
 
+it('marks episode as watched after video ends', function () {
+    $course = Course::factory()
+        ->for(User::factory()->instructor(), 'instructor')
+        ->has(Episode::factory())
+        ->create();
+
+    $user = User::factory()->create();
+    $user->courses()->attach($course);
+
+    expect($user->watchedEpisodes)->toHaveCount(0);
+
+    Livewire::actingAs($user)->test(WatchEpisode::class, ['course' => $course, 'episode' => $course->episodes->last()->getRouteKey()])
+        ->assertOk()
+        ->dispatch('episode-ended', $course->episodes->last()->getRouteKey());
+
+    $user->load('watchedEpisodes');
+
+    expect($user->watchedEpisodes)
+        ->toHaveCount(1);
+});
+
+
+it('marks episode as watched only once', function () {
+    $course = Course::factory()
+        ->for(User::factory()->instructor(), 'instructor')
+        ->has(Episode::factory())
+        ->create();
+
+    $user = User::factory()->create();
+    $user->courses()->attach($course);
+
+    expect($user->watchedEpisodes)->toHaveCount(0);
+
+    Livewire::actingAs($user)->test(WatchEpisode::class, ['course' => $course, 'episode' => $course->episodes->last()->getRouteKey()])
+        ->assertOk()
+        ->dispatch('episode-ended', $course->episodes->last()->getRouteKey())
+        ->dispatch('episode-ended', $course->episodes->last()->getRouteKey());
+
+    $user->load('watchedEpisodes');
+
+    expect($user->watchedEpisodes)
+        ->toHaveCount(1);
+});
+
