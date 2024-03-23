@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Episode;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -67,7 +68,12 @@ class WatchEpisode extends Component implements HasInfolists, HasForms
                         TextEntry::make('formatted_length')
                             ->hiddenLabel()
                             ->icon('heroicon-o-clock'),
-                    ])->columns(2),
+                        IconEntry::make('title')
+                            ->hiddenLabel()
+                            ->icon('heroicon-s-check-circle')
+                            ->color('success')
+                            ->visible(fn (Episode $record): bool => auth()->user()->watchedEpisodes->contains($record)),
+                    ])->columns(3),
             ]);
     }
 
