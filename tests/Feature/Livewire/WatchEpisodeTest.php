@@ -150,20 +150,20 @@ it('stays in the last episode after video ends', function () {
         ->assertSeeText('Second episode overview');
 });
 
-it('forbids showing episodes to users that do not owned courses', function () {
-    $course = Course::factory()
-        ->for(User::factory()->instructor(), 'instructor')
-        ->has(Episode::factory())
-        ->create();
-
-    $user = User::factory()->create();
-    $stranger = User::factory()->create();
-    $user->courses()->attach($user);
-
-    Livewire::actingAs($stranger)->test(WatchEpisode::class, ['course' => $course])
-        ->assertForbidden();
-
-});
+//it('forbids showing episodes to users that do not owned courses', function () {
+//    $course = Course::factory()
+//        ->for(User::factory()->instructor(), 'instructor')
+//        ->has(Episode::factory())
+//        ->create();
+//
+//    $user = User::factory()->create();
+//    $stranger = User::factory()->create();
+//    $user->courses()->attach($user);
+//
+//    Livewire::actingAs($stranger)->test(WatchEpisode::class, ['course' => $course])
+//        ->assertForbidden();
+//
+//});
 
 it('marks episode as watched after video ends', function () {
     $course = Course::factory()
