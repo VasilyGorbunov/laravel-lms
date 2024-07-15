@@ -32,6 +32,10 @@ class ShowCourse extends Component implements HasInfolists, HasForms
                     ->schema([
                         TextEntry::make('title'),
                         TextEntry::make('tagline'),
+                        TextEntry::make('description'),
+                        TextEntry::make('instructor.name'),
+                        TextEntry::make('created_at')
+                            ->date('M d, Y'),
                     ]),
             ]);
     }
