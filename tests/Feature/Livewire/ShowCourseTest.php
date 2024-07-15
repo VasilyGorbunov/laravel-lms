@@ -21,5 +21,5 @@ it('shows course details', function () {
         ->assertSeeText($course->tagline)
         ->assertSeeText($course->description)
         ->assertSeeText($course->instructor->name)
-        ->assertSeeText('Jul 15, 2024');
+        ->assertSeeText($course->created_at->format('M d, Y'));
 });
