@@ -11,12 +11,10 @@ it('renders successfully', function () {
 
 it('shows course details', function () {
     $course = Course::factory()
-        ->state([
-            'title' => 'Course Title'
-        ])
-        ->create();
+         ->create();
 
     Livewire::test(ShowCourse::class, ['course' => $course])
         ->assertOk()
-        ->assertSeeText('Course Title');
+        ->assertSeeText($course->title)
+        ->assertSeeText($course->tagline);
 });
