@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Course;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -32,23 +33,50 @@ class ShowCourse extends Component implements HasInfolists, HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        TextEntry::make('title'),
-                        TextEntry::make('tagline'),
-                        TextEntry::make('description'),
-                        TextEntry::make('instructor.name'),
-                        TextEntry::make('episodes_count')
+                        TextEntry::make('title')
                             ->hiddenLabel()
-                            ->formatStateUsing(fn($state) => "$state episodes"),
-                        TextEntry::make('formatted_length')
-                            ->hiddenLabel(),
-                        TextEntry::make('created_at')
-                            ->date('M d, Y'),
+                            ->size('text-4xl')
+                            ->weight('font-bold')
+                            ->columnSpanFull(),
+                        TextEntry::make('tagline')
+                            ->hiddenLabel()
+                            ->columnSpanFull(),
+                        TextEntry::make('instructor.name')
+                            ->label('Your teacher')
+                            ->columnSpanFull(),
+                        Fieldset::make('')
+                            ->columns(3)
+                            ->columnSpan(1)
+                            ->schema([
+                                TextEntry::make('episodes_count')
+                                    ->hiddenLabel()
+                                    ->formatStateUsing(fn($state) => "$state episodes")
+                                    ->icon('heroicon-o-film'),
+                                TextEntry::make('formatted_length')
+                                    ->hiddenLabel()
+                                    ->icon('heroicon-o-clock'),
+                                TextEntry::make('created_at')
+                                    ->hiddenLabel()
+                                    ->formatStateUsing(fn($state) => $state->diffForHumans())
+                                    ->icon('heroicon-o-calendar'),
+                            ])
+                            ->extraAttributes(['class' => 'border-none !p-0']),
+                    ])->columns(2),
+                Section::make('About this course')
+                    ->description(fn(Course $record) => $record->description)
+                    ->aside()
+                    ->schema([
                         RepeatableEntry::make('episodes')
                             ->schema([
-                                TextEntry::make('title'),
-                                TextEntry::make('formatted_length'),
+                                TextEntry::make('title')
+                                    ->hiddenLabel()
+                                    ->icon('heroicon-o-play-circle'),
+                                TextEntry::make('formatted_length')
+                                    ->hiddenLabel()
+                                    ->icon('heroicon-o-clock'),
                             ])
-                    ]),
+                            ->columns(2)
+                    ])
             ]);
     }
 
