@@ -21,6 +21,7 @@ class ShowCourse extends Component implements HasInfolists, HasForms
     public function mount(Course $course)
     {
         $this->course = $course;
+        $this->course->loadCount('episodes');
     }
 
     public function courseInfolist(Infolist $infolist): Infolist
@@ -34,6 +35,9 @@ class ShowCourse extends Component implements HasInfolists, HasForms
                         TextEntry::make('tagline'),
                         TextEntry::make('description'),
                         TextEntry::make('instructor.name'),
+                        TextEntry::make('episodes_count')
+                            ->hiddenLabel()
+                            ->formatStateUsing(fn ($state) => "$state episodes"),
                         TextEntry::make('created_at')
                             ->date('M d, Y'),
                     ]),
