@@ -14,7 +14,9 @@ it('renders successfully', function () {
 it('shows course details', function () {
     $course = Course::factory()
         ->for(User::factory()->instructor(), 'instructor')
-        ->has(Episode::factory()->count(10), 'episodes')
+        ->has(Episode::factory()
+            ->state(['length_in_minutes' => 10])
+            ->count(10), 'episodes')
         ->create();
 
     //dd($course->episodes->count());
@@ -27,5 +29,5 @@ it('shows course details', function () {
         ->assertSeeText($course->instructor->name)
         ->assertSeeText($course->created_at->format('M d, Y'))
         ->assertSeeText($course->episodes_count . ' episodes')
-        ->assertSeeText($course->episodes_duration_sum);
+        ->assertSeeText('1 hr 40 mins');
 });

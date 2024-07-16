@@ -38,6 +38,15 @@ class ShowCourse extends Component implements HasInfolists, HasForms
                         TextEntry::make('episodes_count')
                             ->hiddenLabel()
                             ->formatStateUsing(fn ($state) => "$state episodes"),
+                        TextEntry::make('episodes')
+                        ->hiddenLabel()
+                        ->formatStateUsing(function (Course $record) {
+                            $total_minutes = $record->episodes->sum('length_in_minutes');
+                            $hours = floor($total_minutes / 60);
+                            $reminder_minutes = $total_minutes % 60;
+
+                            return "$hours hr $reminder_minutes mins";
+                        }),
                         TextEntry::make('created_at')
                             ->date('M d, Y'),
                     ]),
