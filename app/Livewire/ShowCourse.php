@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Course;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
@@ -37,18 +38,16 @@ class ShowCourse extends Component implements HasInfolists, HasForms
                         TextEntry::make('instructor.name'),
                         TextEntry::make('episodes_count')
                             ->hiddenLabel()
-                            ->formatStateUsing(fn ($state) => "$state episodes"),
-                        TextEntry::make('episodes')
-                        ->hiddenLabel()
-                        ->formatStateUsing(function (Course $record) {
-                            $total_minutes = $record->episodes->sum('length_in_minutes');
-                            $hours = floor($total_minutes / 60);
-                            $reminder_minutes = $total_minutes % 60;
-
-                            return "$hours hr $reminder_minutes mins";
-                        }),
+                            ->formatStateUsing(fn($state) => "$state episodes"),
+                        TextEntry::make('formatted_length')
+                            ->hiddenLabel(),
                         TextEntry::make('created_at')
                             ->date('M d, Y'),
+                        RepeatableEntry::make('episodes')
+                            ->schema([
+                                TextEntry::make('title'),
+                                TextEntry::make('formatted_length'),
+                            ])
                     ]),
             ]);
     }

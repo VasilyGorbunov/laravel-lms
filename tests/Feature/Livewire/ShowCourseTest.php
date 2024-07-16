@@ -4,6 +4,7 @@ use App\Livewire\ShowCourse;
 use App\Models\Course;
 use App\Models\Episode;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Livewire\Livewire;
 
 it('renders successfully', function () {
@@ -29,5 +30,32 @@ it('shows course details', function () {
         ->assertSeeText($course->instructor->name)
         ->assertSeeText($course->created_at->format('M d, Y'))
         ->assertSeeText($course->episodes_count . ' episodes')
-        ->assertSeeText('1 hr 40 mins');
+        ->assertSeeText($course->formatted_length);
 });
+
+it('shows the episode list', function () {
+    $course = Course::factory()
+        ->for(User::factory()->instructor(), 'instructor')
+        ->has(
+            Episode::factory()
+                ->count(3)
+                ->state(new Sequence(
+                    ['title' => 'First Episode', 'length_in_minutes' => 5],
+                    ['title' => 'Second Episode', 'length_in_minutes' => 10],
+                    ['title' => 'Third Episode', 'length_in_minutes' => 1],
+                ))
+        )
+        ->create();
+
+    //dd($course->episodes->count());
+
+    Livewire::test(ShowCourse::class, ['course' => $course])
+        ->assertOk()
+        ->assertSeeText('First Episode')
+        ->assertSeeText('5 mins')
+        ->assertSeeText('Second Episode')
+        ->assertSeeText('10 mins')
+        ->assertSeeText('Third Episode')
+        ->assertSeeText('1 min');
+});
+

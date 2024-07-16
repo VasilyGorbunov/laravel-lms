@@ -39,7 +39,7 @@ it('has the episodes count', function () {
 });
 
 
-it('has the episodes length', function () {
+it('has the course length', function () {
     $courseA = Course::factory()
         ->for(User::factory()->instructor(), 'instructor')
         ->has(Episode::factory()->state(['length_in_minutes' => 150]), 'episodes')
